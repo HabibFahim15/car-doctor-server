@@ -44,7 +44,7 @@ async function run() {
 
       //specific value from array object if i want..otherwise fuul object will return.
       const options ={
-        projection: {title: 1,img:1, price: 1, service_id: 1},
+        projection: {title: 1, img:1, price: 1, service_id: 1},
       };
 
       const result = await serviceCollection.findOne(query,options);
@@ -68,6 +68,31 @@ async function run() {
       const booking=req.body;
       console.log(booking);
       const result = await bookingCollection.insertOne(booking)
+      res.send(result)
+    });
+
+    app.patch('/bookings/:id',async(req, res)=>{
+      const id = req.params.id;
+      const filter ={_id: new ObjectId(id)};
+      const updatedBooking = req.body;
+      console.log(updatedBooking);
+      const updateDoc ={
+        $set:{
+          status: updatedBooking.status
+        },
+
+      };
+      const result = await bookingCollection.updateOne(filter, updateDoc);
+
+      res.send(result)
+
+    })
+
+
+    app.delete('/bookings/:id',async (req,res)=>{
+      const id = req.params.id;
+      const query ={_id: new ObjectId(id)}
+      const result = await bookingCollection.deleteOne(query);
       res.send(result)
     });
 
