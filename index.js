@@ -109,10 +109,13 @@ async function run() {
       console.log(req.query.email);
       // after send the cookey from booking.jsx checking what server got.
       // console.log('tok tok token', req.cookies.token);
+      if(req.query.email !== req.user.email){
+        return res.status(403).send({message: 'forbidden access'})
+      }
       let query ={};
       if (req.query?.email) {
         query = {email: req.query.email}
-      }
+      }g
       const result = await bookingCollection.find(query).toArray();
       res.send(result);
     })
